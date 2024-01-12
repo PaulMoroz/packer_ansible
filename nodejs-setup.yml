@@ -1,0 +1,33 @@
+---
+- name: Install Node.js
+  hosts: all
+  become: yes
+  roles:
+    - dev-sec.os-hardening
+  tasks:
+    - name: Check if Node.js is installed
+      command: node -v
+      register: node_version
+      failed_when: false
+      changed_when: false
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: node_version.rc != 0
+
+    - name: Install Node.js and npm
+      apt:
+        name:
+          - nodejs
+          - npm
+        state: present
+      when: node_version.rc != 0
+
+    - name: Check Node.js version
+      command: node -v
+      when: node_version.rc != 0
+
+    - name: Check npm version
+      command: npm -v
+      when: node_version.rc != 0

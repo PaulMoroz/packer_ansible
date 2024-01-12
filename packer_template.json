@@ -1,0 +1,20 @@
+{
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "region": "eu-north-1",
+        "instance_type": "t3.micro",
+        "source_ami": "ami-0014ce3e52359afbd",
+        "ssh_username": "ubuntu",
+        "ami_name": "ubuntu-node-{{timestamp}}"
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "ansible",
+        "playbook_file": "nodejs-setup.yml",
+        "extra_arguments": [ "--scp-extra-args", "'-O'" ]
+      }
+    ]
+  }
+  
